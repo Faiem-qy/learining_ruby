@@ -578,97 +578,151 @@ puts "------------------EX 35------------------"
 
 # Exercise 35: Branches and Functions https://learnrubythehardway.org/book/ex35.html
 
-def gold_room
-  puts "This room is full of gold.  How much do you take?"
+# def gold_room
+#   puts "This room is full of gold.  How much do you take?"
 
-  print "> "
-  choice = $stdin.gets.chomp
+#   print "> "
+#   choice = $stdin.gets.chomp
 
-   # Checking if the user's input contains numbers
-  # this line has a bug, so fix it
-  if choice == "0" || choice == "1"
-    how_much = choice.to_i
+#    # Checking if the user's input contains numbers
+#   # this line has a bug, so fix it
+#   if choice == "0" || choice == "1"
+#     how_much = choice.to_i
+#   else
+#     dead("Man, learn to type a number.")
+#   end
+
+#   # Checking the amount of gold taken
+#   if how_much < 50
+#     puts "Nice, you're not greedy, you win!"
+#     exit(0)
+#   else
+#     dead("You greedy bastard!")
+#   end
+# end
+
+# # Function for the bear room scenario
+# def bear_room
+#   puts "There is a bear here."
+#   puts "The bear has a bunch of honey."
+#   puts "The fat bear is in front of another door."
+#   puts "How are you going to move the bear?"
+#   bear_moved = false
+
+#   while true
+#     print "> "
+#     choice = $stdin.gets.chomp
+
+#     if choice == "take honey"
+#       dead("The bear looks at you then slaps your face off.")
+#     elsif choice == "taunt bear" && !bear_moved
+#       puts "The bear has moved from the door. You can go through it now."
+#       bear_moved = true
+#     elsif choice == "taunt bear" && bear_moved
+#       dead("The bear gets pissed off and chews your leg off.")
+#     elsif choice == "open door" && bear_moved
+#       gold_room
+#     else
+#       puts "I got no idea what that means."
+#     end
+#   end
+# end
+
+# # Function for encountering Cthulhu
+# def cthulhu_room
+#   puts "Here you see the great evil Cthulhu."
+#   puts "He, it, whatever stares at you and you go insane."
+#   puts "Do you flee for your life or eat your head?"
+
+#   print "> "
+#   choice = $stdin.gets.chomp
+
+#   if choice.include? "flee"
+#     start
+#   elsif choice.include? "head"
+#     dead("Well that was tasty!")
+#   else
+#     cthulhu_room
+#   end
+# end
+
+# # Function to handle player death
+# def dead(why)
+#   puts why, "Good job!"
+#   exit(0)
+# end
+
+# # Function starting the game
+# def start
+#   puts "You are in a dark room."
+#   puts "There is a door to your right and left."
+#   puts "Which one do you take?"
+
+#   print "> "
+#   choice = $stdin.gets.chomp
+
+#   if choice == "left"
+#     bear_room
+#   elsif choice == "right"
+#     cthulhu_room
+#   else
+#     dead("You stumble around the room until you starve.")
+#   end
+# end
+
+# # Starting the game by calling the start function
+# start
+
+#  Benchmarking without blocks
+
+# start_time = Time.now
+
+# fibonacci(300)
+
+# end_time = Time.now
+
+# running_time = end_time - start_time
+
+# puts "fibonacci(300) took #{running_time} seconds."
+
+
+puts "---------Benchmarking without blocks------------"
+
+require 'benchmark'
+
+def fibonacci(n)
+  if n <= 1
+    n
   else
-    dead("Man, learn to type a number.")
-  end
-
-  # Checking the amount of gold taken
-  if how_much < 50
-    puts "Nice, you're not greedy, you win!"
-    exit(0)
-  else
-    dead("You greedy bastard!")
+    fibonacci(n - 1) + fibonacci(n - 2)
   end
 end
 
-# Function for the bear room scenario
-def bear_room
-  puts "There is a bear here."
-  puts "The bear has a bunch of honey."
-  puts "The fat bear is in front of another door."
-  puts "How are you going to move the bear?"
-  bear_moved = false
+start_time = Time.now
 
-  while true
-    print "> "
-    choice = $stdin.gets.chomp
+running_time = Benchmark.realtime { fibonacci(30) }
 
-    if choice == "take honey"
-      dead("The bear looks at you then slaps your face off.")
-    elsif choice == "taunt bear" && !bear_moved
-      puts "The bear has moved from the door. You can go through it now."
-      bear_moved = true
-    elsif choice == "taunt bear" && bear_moved
-      dead("The bear gets pissed off and chews your leg off.")
-    elsif choice == "open door" && bear_moved
-      gold_room
-    else
-      puts "I got no idea what that means."
-    end
-  end
+end_time = Time.now
+
+puts "fibonacci(30) took #{running_time} seconds."
+
+
+puts "---------Benchmarking with blocks------------"
+
+# Require the benchmark module
+# require 'benchmark'
+
+# Define a benchmark function
+def benchmark
+  time = Benchmark.measure { yield }
+  time.real
 end
 
-# Function for encountering Cthulhu
-def cthulhu_room
-  puts "Here you see the great evil Cthulhu."
-  puts "He, it, whatever stares at you and you go insane."
-  puts "Do you flee for your life or eat your head?"
+# Define a very long string
+long_string = "apple" * 100_000_000
 
-  print "> "
-  choice = $stdin.gets.chomp
+# Execute the benchmark for string.reverse
+running_time = benchmark { long_string.reverse }
 
-  if choice.include? "flee"
-    start
-  elsif choice.include? "head"
-    dead("Well that was tasty!")
-  else
-    cthulhu_room
-  end
-end
-
-# Function to handle player death
-def dead(why)
-  puts why, "Good job!"
-  exit(0)
-end
-
-# Function starting the game
-def start
-  puts "You are in a dark room."
-  puts "There is a door to your right and left."
-  puts "Which one do you take?"
-
-  print "> "
-  choice = $stdin.gets.chomp
-
-  if choice == "left"
-    bear_room
-  elsif choice == "right"
-    cthulhu_room
-  else
-    dead("You stumble around the room until you starve.")
-  end
-end
-
-# Starting the game by calling the start function
-start
+# Output the time taken
+puts "string.reverse took #{running_time} seconds to run"

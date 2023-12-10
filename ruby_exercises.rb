@@ -726,3 +726,23 @@ running_time = benchmark { long_string.reverse }
 
 # Output the time taken
 puts "string.reverse took #{running_time} seconds to run"
+
+
+#  difference between using puts and pp
+require 'pp'
+
+data = {
+  name: 'John Doe',
+  age: 30,
+  hobbies: ['Reading', 'Gardening', 'Hiking'],
+  address: {
+    city: 'New York',
+    zip: '10001'
+  }
+}
+
+puts "Output using puts:"
+puts data
+
+puts "\nOutput using pp:"
+pp data
